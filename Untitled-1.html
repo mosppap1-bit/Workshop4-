@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>สวนแห่งความคิดสร้างสรรค์ | Portfolio</title>
+<meta name="description" content="Portfolio ธีมสวน - ผลงาน ทักษะ และเส้นทางการเติบโตของนักศึกษา" />
+
+<!-- ============================================================
+     [ตั้งค่าฟอนต์]
+     - "Fraunces" : ฟอนต์หัวข้อ serif ที่มีเส้นโค้งนุ่ม ให้ความรู้สึกแบบ
+       สมุดบันทึกสวน/งานพิมพ์ออร์แกนิก ไม่ใช่ sans-serif แข็งทื่อ
+     - "Sarabun"  : ฟอนต์เนื้อหาภาษาไทย อ่านง่าย สบายตา
+     - "Caveat"   : ฟอนต์ลายมือ ใช้แต้มจุดเล็กๆ เช่น ป้ายชื่อกระถางต้นไม้
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Sarabun:wght@300;400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // ============================================================
+  // [ตั้งค่าธีมสี Tailwind] — โทนสวนธรรมชาติ แก้สีหลักได้ที่นี่
+  // ============================================================
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream:    '#F7F2E9', // พื้นหลังหลัก (ครีมอบอุ่นแบบกระดาษ)
+          leaf:     '#3D5A40', // เขียวเข้มใบไม้ (ข้อความหลัก/หัวข้อ)
+          sage:     '#8A9A5B', // เขียวเสจ (สี accent หลัก ปุ่ม/ไอคอน)
+          sagedeep: '#6B7D45', // เขียวเสจเข้ม (hover state)
+          wood:     '#C9A57B', // น้ำตาลไม้ (เส้นขอบ/กรอบ)
+          woodlt:   '#E8DCC8', // น้ำตาลไม้อ่อน (พื้นหลังการ์ด)
+          blossom:  '#F4C9D1', // ชมพูดอกไม้ (accent รอง)
+          sky:      '#A9C4D8', // ฟ้าอ่อน (แต้มสีที่ 3)
+          inkgreen: '#2C3E2D', // เขียวเข้มมาก (ตัวอักษรสำคัญ)
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['Sarabun', 'sans-serif'],
+          hand: ['Caveat', 'cursive'],
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  /* ============================================================
+     [สไตล์เสริมที่ Tailwind utility ทำไม่ได้ตรงๆ]
+  ============================================================ */
+  html { background-color: #F7F2E9; }
+  body { font-family: 'Sarabun', sans-serif; }
+
+  /* พื้นผิวกระดาษจางๆ ทั่วทั้งหน้า ให้ความรู้สึกแบบสมุดบันทึกธรรมชาติ */
+  body {
+    background-image: radial-gradient(circle at 1px 1px, rgba(61,90,64,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+
+  /* เส้นเถาวัลย์ SVG ที่ลากต่อเนื่องในพื้นหลัง Hero */
+  .vine-stroke { stroke: #8A9A5B; stroke-width: 2; fill: none; stroke-linecap: round; }
+  .vine-leaf { fill: #8A9A5B; }
+
+  /* การ์ดผลงานทรง organic: มุมมนไม่เท่ากันแต่ละมุม ให้ดูเป็นใบไม้/หินมากกว่ากล่องสี่เหลี่ยม */
+  .organic-card {
+    border-radius: 38px 22px 40px 18px;
+    transition: transform .4s ease, box-shadow .4s ease, border-radius .4s ease;
+  }
+  .organic-card:hover {
+    transform: translateY(-6px) rotate(-0.4deg);
+    border-radius: 22px 40px 18px 38px;
+    box-shadow: 0 24px 40px -22px rgba(61,90,64,0.35);
+  }
+
+  /* กรอบรูปโปรไฟล์ทรงใบไม้/หยดน้ำ ใช้ clip-path แทนสี่เหลี่ยม-วงกลมทื่อๆ */
+  .leaf-frame {
+    clip-path: path('M150,0 C235,0 300,65 300,150 C300,235 235,300 150,300 C65,300 0,235 0,150 C0,75 55,15 150,0 Z');
+  }
+
+  /* แถบทักษะรูปทรงใบไม้ (แทน progress bar สี่เหลี่ยมทั่วไป) */
+  .leaf-progress-track {
+    height: 14px;
+    border-radius: 0 50px 0 50px / 0 50px 0 50px;
+    background: #E8DCC8;
+    overflow: hidden;
+  }
+  .leaf-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 0 50px 0 50px / 0 50px 0 50px;
+    background: linear-gradient(90deg, #8A9A5B, #3D5A40);
+    transition: width 1.2s cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* จุดดอกไม้บน Timeline กระพริบช้าๆ เหมือนกำลังผลิบาน */
+  @keyframes bloom {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+  }
+  .bloom-dot { animation: bloom 3s ease-in-out infinite; }
+
+  /* เส้นโฟกัสคีย์บอร์ด (accessibility) */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid #3D5A40;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  section[id] { scroll-margin-top: 88px; }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #F7F2E9; }
+  ::-webkit-scrollbar-thumb { background: #C9A57B; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: #8A9A5B; }
+
+  /* เส้นเถาวัลย์คดเคี้ยวของ Timeline (วาดด้วย SVG path แทนเส้นตรง) */
+  .vine-path { stroke: #C9A57B; stroke-width: 3; fill: none; stroke-linecap: round; }
+</style>
+</head>
+
+<body class="bg-cream text-inkgreen antialiased">
+
+<!-- ============================================================
+     [1] NAVIGATION BAR — Sticky ติดด้านบน ทรงป้ายไม้แขวนในสวน
+     แก้ไข: เปลี่ยนชื่อย่อ/โลโก้ และเมนูตามต้องการ
+============================================================ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-cream/90 backdrop-blur-md border-b border-wood/40">
+  <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <!-- โลโก้/ชื่อย่อ -->
+    <a href="#hero" class="font-display font-semibold text-lg text-leaf flex items-center gap-2">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+        <path d="M12 21c0-6 0-11 0-15M12 6c0-3 2-5 5-5-1 4-3 5-5 5ZM12 11c0-3-2-4-5-4 1 3 3 4 5 4Z" class="vine-stroke"/>
+      </svg>
+      สวนของฉัน
+    </a>
+
+    <!-- เมนูเดสก์ท็อป -->
+    <ul class="hidden md:flex items-center gap-8 font-display text-sm text-leaf/80">
+      <li><a href="#hero" class="hover:text-sage transition-colors">หน้าแรก</a></li>
+      <li><a href="#skills" class="hover:text-sage transition-colors">ทักษะที่เติบโต</a></li>
+      <li><a href="#growth-path" class="hover:text-sage transition-colors">เส้นทางเติบโต</a></li>
+      <li><a href="#projects" class="hover:text-sage transition-colors">ผลงานที่ผลิบาน</a></li>
+      <li><a href="#contact" class="hover:text-sage transition-colors">เชื่อมต่อ</a></li>
+    </ul>
+
+    <a href="#contact"
+       class="hidden md:inline-flex items-center gap-2 bg-sage text-cream text-sm font-display font-medium px-4 py-2 rounded-full hover:bg-sagedeep transition-colors">
+      หว่านเมล็ดทักทาย 🌱
+    </a>
+
+    <!-- ปุ่มเมนูมือถือ -->
+    <button id="menu-btn" aria-label="เปิดเมนู" aria-expanded="false" class="md:hidden text-leaf p-2">
+      <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- เมนูมือถือ -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-wood/40 bg-cream">
+    <ul class="flex flex-col gap-1 px-5 py-4 font-display text-sm text-leaf/80">
+      <li><a href="#hero" class="block py-2 hover:text-sage">หน้าแรก</a></li>
+      <li><a href="#skills" class="block py-2 hover:text-sage">ทักษะที่เติบโต</a></li>
+      <li><a href="#growth-path" class="block py-2 hover:text-sage">เส้นทางเติบโต</a></li>
+      <li><a href="#projects" class="block py-2 hover:text-sage">ผลงานที่ผลิบาน</a></li>
+      <li><a href="#contact" class="block py-2 text-sage">เชื่อมต่อ</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ============================================================
+     [2] HERO SECTION — "Creative Garden Welcome"
+     แก้ไข: รูปโปรไฟล์, ชื่อ, สาขา, มหาวิทยาลัย, คำโปรย
+============================================================ -->
+<section id="hero" class="relative pt-32 pb-24 px-5 sm:px-8 overflow-hidden">
+
+  <!-- ลายเถาวัลย์มุมซ้ายบน พาดจากขอบจอลงมา -->
+  <svg class="absolute top-0 left-0 w-40 sm:w-56 opacity-90 -translate-x-4 -translate-y-4" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+    <path d="M0,10 C40,30 30,70 60,90 C90,110 80,150 110,170" class="vine-stroke"/>
+    <circle cx="60" cy="90" r="6" class="vine-leaf"/>
+    <circle cx="110" cy="170" r="5" class="vine-leaf"/>
+    <ellipse cx="38" cy="48" rx="10" ry="5" class="vine-leaf" transform="rotate(40 38 48)"/>
+    <ellipse cx="85" cy="130" rx="10" ry="5" class="vine-leaf" transform="rotate(-30 85 130)"/>
+  </svg>
+
+  <!-- ลายเถาวัลย์มุมขวาบน -->
+  <svg class="absolute top-0 right-0 w-40 sm:w-56 opacity-90 translate-x-4 -translate-y-4 scale-x-[-1]" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+    <path d="M0,10 C40,30 30,70 60,90 C90,110 80,150 110,170" class="vine-stroke" stroke="#C9A57B"/>
+    <circle cx="60" cy="90" r="6" fill="#F4C9D1"/>
+    <circle cx="110" cy="170" r="5" fill="#A9C4D8"/>
+    <ellipse cx="38" cy="48" rx="10" ry="5" fill="#F4C9D1" transform="rotate(40 38 48)"/>
+  </svg>
+
+  <div class="max-w-6xl mx-auto grid md:grid-cols-[1fr_1.15fr] gap-12 items-center relative">
+
+    <!-- รูปโปรไฟล์ทรงใบไม้ พร้อมกรอบเถาวัลย์ -->
+    <div class="flex justify-center md:order-2">
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80">
+        <!-- พวงมาลัยใบไม้ล้อมรอบ (วาดด้วยวงรีเรียงเป็นวงแหวน) -->
+        <svg class="absolute -inset-6 w-[calc(100%+3rem)] h-[calc(100%+3rem)]" viewBox="0 0 100 100" aria-hidden="true">
+          <g fill="#8A9A5B" opacity="0.85">
+            <ellipse cx="50" cy="2" rx="4" ry="2.2" transform="rotate(0 50 2)"/>
+            <ellipse cx="68" cy="6" rx="4" ry="2.2" transform="rotate(35 68 6)"/>
+            <ellipse cx="83" cy="18" rx="4" ry="2.2" transform="rotate(70 83 18)"/>
+            <ellipse cx="92" cy="36" rx="4" ry="2.2" transform="rotate(100 92 36)"/>
+            <ellipse cx="92" cy="64" rx="4" ry="2.2" transform="rotate(260 92 64)"/>
+            <ellipse cx="83" cy="82" rx="4" ry="2.2" transform="rotate(290 83 82)"/>
+            <ellipse cx="68" cy="94" rx="4" ry="2.2" transform="rotate(325 68 94)"/>
+            <ellipse cx="32" cy="94" rx="4" ry="2.2" transform="rotate(35 32 94)"/>
+            <ellipse cx="17" cy="82" rx="4" ry="2.2" transform="rotate(70 17 82)"/>
+            <ellipse cx="8" cy="64" rx="4" ry="2.2" transform="rotate(100 8 64)"/>
+            <ellipse cx="8" cy="36" rx="4" ry="2.2" transform="rotate(260 8 36)"/>
+            <ellipse cx="17" cy="18" rx="4" ry="2.2" transform="rotate(290 17 18)"/>
+            <ellipse cx="32" cy="6" rx="4" ry="2.2" transform="rotate(325 32 6)"/>
+          </g>
+          <g fill="#F4C9D1" opacity="0.9">
+            <circle cx="50" cy="-1" r="2"/>
+            <circle cx="76" cy="12" r="2"/>
+            <circle cx="89" cy="50" r="2"/>
+            <circle cx="76" cy="88" r="2"/>
+            <circle cx="24" cy="88" r="2"/>
+            <circle cx="11" cy="50" r="2"/>
+            <circle cx="24" cy="12" r="2"/>
+          </g>
+        </svg>
+        <!-- แก้ไข: เปลี่ยน src เป็นรูปโปรไฟล์จริงของคุณ -->
+        <img src="สกรีนช็อต 2026-06-19 110607.png"
+             alt="รูปโปรไฟล์ของฉัน"
+             class="leaf-frame relative w-full h-full object-cover shadow-xl" />
+      </div>
+    </div>
+
+    <!-- ข้อความฝั่งซ้าย -->
+    <div class="md:order-1 text-center md:text-left">
+      <!-- ชื่อ section ตามบรีฟ -->
+      <p class="font-hand text-2xl text-sage mb-1">Creative Garden Welcome 🌿</p>
+
+      <!-- แก้ไข: ชื่อ -->
+      <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.15] text-leaf">
+        ยินดีต้อนรับสู่สวนแห่ง<br class="hidden sm:block">
+        ความคิดสร้างสรรค์ของ <span class="italic text-sage">อภิวัฒน์ แก้วสุข</span>
+      </h1>
+
+      <!-- แก้ไข: สาขา / มหาวิทยาลัย -->
+      <p class="mt-4 text-base text-leaf/70 font-medium">
+        นักศึกษาชั้นปีที่ 3 &middot; สาขาเกมและแอนิเมชั่น &middot; เทคนิคอุบลราชธานี
+      </p>
+
+      <!-- แก้ไข: คำโปรยเกี่ยวกับการเติบโต -->
+      <p class="mt-6 text-base sm:text-lg text-inkgreen/80 leading-relaxed max-w-xl mx-auto md:mx-0">
+        เพราะการเรียนรู้คือการปลูกต้นไม้ — ทุกบทเรียน ทุกโปรเจกต์ คือเมล็ดพันธุ์ที่ผมหว่านลงไป
+        วันนี้สวนแห่งความรู้ของผมเริ่มผลิใบ และกำลังมองหาพื้นที่ฝึกงาน
+        เพื่อให้มันเติบโตและออกดอกผลต่อไป
+      </p>
+
+      <!-- ปุ่ม Call to Action 2 ปุ่ม -->
+      <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+        <a href="#projects"
+           class="inline-flex items-center gap-2 bg-sage text-cream font-display font-medium px-6 py-3 rounded-full hover:bg-sagedeep transition-colors shadow-sm">
+          🌼 เปิดดูสวนผลงาน
+        </a>
+        <!-- แก้ไข: เปลี่ยน href เป็นไฟล์ Resume จริง เช่น "resume.pdf" -->
+        <a href="resume.pdf" download
+           class="inline-flex items-center gap-2 border-2 border-wood text-leaf font-display font-medium px-6 py-3 rounded-full hover:bg-woodlt transition-colors">
+          🍂 ดาวน์โหลดบันทึกการเติบโต
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     เกี่ยวกับฉัน (สั้นๆ คั่นระหว่าง Hero กับ Skills)
+============================================================ -->
+<section id="about" class="px-5 sm:px-8 py-14">
+  <div class="max-w-4xl mx-auto text-center">
+    <p class="text-lg sm:text-xl text-inkgreen/75 leading-relaxed font-light italic">
+      "เหมือนต้นไม้ที่ต้องใช้เวลาหยั่งราก ผมเชื่อว่าทุกทักษะต้องค่อยๆ บ่มเพาะ
+      ผ่านการลงมือทำจริง ผิดพลาด และเรียนรู้ใหม่อีกครั้ง"
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     [3] SKILLS SECTION — "ทักษะที่กำลังเติบโต (Growing Skills)"
+     แก้ไข: ชื่อทักษะ, ระดับ % , badge soft skills
+============================================================ -->
+<section id="skills" class="px-5 sm:px-8 py-20 bg-woodlt/50 border-t border-b border-wood/30 relative overflow-hidden">
+
+  <!-- ลายเถาวัลย์ประดับมุมขวา -->
+  <svg class="absolute -right-10 top-10 w-48 opacity-40 hidden lg:block" viewBox="0 0 200 300" fill="none" aria-hidden="true">
+    <path d="M100,0 C60,40 140,80 90,130 C50,170 130,220 80,300" class="vine-stroke"/>
+    <ellipse cx="100" cy="50" rx="12" ry="6" class="vine-leaf" transform="rotate(60 100 50)"/>
+    <ellipse cx="100" cy="150" rx="12" ry="6" class="vine-leaf" transform="rotate(-60 100 150)"/>
+    <ellipse cx="95" cy="240" rx="12" ry="6" class="vine-leaf" transform="rotate(50 95 240)"/>
+  </svg>
+
+  <div class="max-w-6xl mx-auto relative">
+    <p class="font-hand text-2xl text-sage">Growing Skills 🌱</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl mt-1 mb-12 text-leaf">ทักษะที่กำลังเติบโต</h2>
+
+    <div class="grid md:grid-cols-2 gap-12">
+
+      <!-- ----- Hard Skills: แสดงด้วย Leaf Progress Bar ----- -->
+      <div>
+        <h3 class="font-display font-semibold text-lg mb-6 flex items-center gap-2 text-leaf">
+          <span class="text-2xl">🌳</span> Hard Skills
+        </h3>
+
+        <!-- แก้ไข: data-percent คือระดับความชำนาญ (0-100) -->
+        <div class="space-y-6">
+          <div class="skill-item">
+            <div class="flex justify-between text-sm mb-2">
+              <span class="font-medium font-display">HTML &amp; CSS</span>
+              <span class="font-hand text-base text-sage">งอกงามแล้ว 90%</span>
+            </div>
+            <div class="leaf-progress-track">
+              <div class="leaf-progress-fill" data-percent="90"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="flex justify-between text-sm mb-2">
+              <span class="font-medium font-display">JavaScript</span>
+              <span class="font-hand text-base text-sage">ผลิใบ 75%</span>
+            </div>
+            <div class="leaf-progress-track">
+              <div class="leaf-progress-fill" data-percent="75"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="flex justify-between text-sm mb-2">
+              <span class="font-medium font-display">Python</span>
+              <span class="font-hand text-base text-sage">แตกหน่อ 70%</span>
+            </div>
+            <div class="leaf-progress-track">
+              <div class="leaf-progress-fill" data-percent="70"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="flex justify-between text-sm mb-2">
+              <span class="font-medium font-display">React</span>
+              <span class="font-hand text-base text-sage">งอกราก 60%</span>
+            </div>
+            <div class="leaf-progress-track">
+              <div class="leaf-progress-fill" data-percent="60"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="flex justify-between text-sm mb-2">
+              <span class="font-medium font-display">Figma (UI/UX)</span>
+              <span class="font-hand text-base text-sage">เริ่มเพาะ 65%</span>
+            </div>
+            <div class="leaf-progress-track">
+              <div class="leaf-progress-fill" data-percent="65"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ----- Soft Skills: Badge แบบกระถางต้นไม้เล็กๆ ----- -->
+      <div>
+        <h3 class="font-display font-semibold text-lg mb-6 flex items-center gap-2 text-leaf">
+          <span class="text-2xl">🪴</span> Soft Skills
+        </h3>
+
+        <!-- แก้ไข: เพิ่ม/ลบ/เปลี่ยนชื่อ badge ได้ตามต้องการ -->
+        <div class="flex flex-wrap gap-3">
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 การทำงานเป็นทีม</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 การแก้ปัญหา</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 บริหารเวลา</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 คิดวิเคราะห์</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 สื่อสาร</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 ใส่ใจรายละเอียด</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 เรียนรู้ไว</span>
+          <span class="px-4 py-2 rounded-full bg-cream border border-sage/40 text-sm font-display text-leaf hover:bg-sage hover:text-cream transition-colors">🌱 ภาวะผู้นำ</span>
+        </div>
+
+        <!-- ภาษา -->
+        <h3 class="font-display font-semibold text-lg mt-10 mb-4 text-leaf flex items-center gap-2">
+          <span class="text-2xl">🦋</span> ภาษา
+        </h3>
+        <div class="space-y-3 text-sm">
+          <div class="flex justify-between border-b border-wood/30 pb-2"><span class="font-display">ไทย</span><span class="text-leaf/60">เจ้าของภาษา</span></div>
+          <div class="flex justify-between border-b border-wood/30 pb-2"><span class="font-display">อังกฤษ</span><span class="text-leaf/60">ดี (TOEIC 750)</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     [4] EXPERIENCE SECTION — "เส้นทางการเติบโตของฉัน (My Growth Path)"
+     Timeline เป็นเถาวัลย์คดเคี้ยว แต่ละจุดคือดอกไม้ที่ผลิบาน
+     แก้ไข: ปี/ช่วงเวลา, ตำแหน่ง, องค์กร, รายละเอียด
+============================================================ -->
+<section id="growth-path" class="px-5 sm:px-8 py-20">
+  <div class="max-w-4xl mx-auto">
+    <p class="font-hand text-2xl text-sage">My Growth Path 🌿</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl mt-1 mb-14 text-leaf">เส้นทางการเติบโตของฉัน</h2>
+
+    <!-- โครง Timeline: เส้นเถาวัลย์ SVG คดเคี้ยวซ้อนอยู่หลัง list -->
+    <div class="relative pl-12 sm:pl-16">
+
+      <!-- เส้นเถาวัลย์คดเคี้ยวพาดยาวทั้ง timeline (วาดเป็น path หยักไปมา) -->
+      <svg class="absolute left-0 top-0 h-full w-12 sm:w-16" viewBox="0 0 60 800" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M30,0 C10,80 50,160 30,240 C10,320 50,400 30,480 C10,560 50,640 30,800"
+              class="vine-path" vector-effect="non-scaling-stroke"/>
+      </svg>
+
+      <div class="space-y-16">
+
+        <!-- ----- Growth item 1 ----- -->
+        <div class="relative">
+          <span class="bloom-dot absolute -left-12 sm:-left-16 top-1 w-8 h-8 flex items-center justify-center text-xl">🌸</span>
+          <span class="font-hand text-xl text-sage">มิ.ย. 2568 – ส.ค. 2568</span>
+          <h3 class="font-display font-semibold text-lg mt-1 text-leaf">นักศึกษาฝึกงาน &middot; ฝ่าย Front-End</h3>
+          <p class="text-sm text-leaf/60 mb-2">บริษัท ตัวอย่าง จำกัด</p>
+          <p class="text-inkgreen/75 text-sm leading-relaxed max-w-xl">
+            พัฒนาหน้าเว็บส่วนแดชบอร์ดร่วมกับทีม โดยใช้ React และ Tailwind CSS
+            ได้ฝึกอ่าน Design จาก Figma และแปลงเป็นโค้ดจริง พร้อมรับฟีดแบ็กจากรุ่นพี่ในทีม
+          </p>
+        </div>
+
+        <!-- ----- Growth item 2 ----- -->
+        <div class="relative">
+          <span class="bloom-dot absolute -left-12 sm:-left-16 top-1 w-8 h-8 flex items-center justify-center text-xl">🌼</span>
+          <span class="font-hand text-xl text-sage">2567</span>
+          <h3 class="font-display font-semibold text-lg mt-1 text-leaf">ประธานฝ่ายไอที &middot; ชมรมคอมพิวเตอร์</h3>
+          <p class="text-sm text-leaf/60 mb-2">มหาวิทยาลัยตัวอย่าง</p>
+          <p class="text-inkgreen/75 text-sm leading-relaxed max-w-xl">
+            ดูแลเว็บไซต์และระบบลงทะเบียนกิจกรรมของชมรม
+            จัดกิจกรรม Workshop เบื้องต้นด้าน Coding ให้รุ่นน้องปี 1
+          </p>
+        </div>
+
+        <!-- ----- Growth item 3 ----- -->
+        <div class="relative">
+          <span class="bloom-dot absolute -left-12 sm:-left-16 top-1 w-8 h-8 flex items-center justify-center text-xl">🌿</span>
+          <span class="font-hand text-xl text-sage">ต.ค. 2566</span>
+          <h3 class="font-display font-semibold text-lg mt-1 text-leaf">ผู้เข้าร่วมค่าย &middot; Code Camp รุ่นที่ 5</h3>
+          <p class="text-sm text-leaf/60 mb-2">จัดโดยสมาคมนักพัฒนาตัวอย่าง</p>
+          <p class="text-inkgreen/75 text-sm leading-relaxed max-w-xl">
+            เข้าค่ายเขียนโปรแกรมเข้มข้น 5 วัน เรียนรู้พื้นฐาน Web Development
+            และทำโปรเจกต์กลุ่มส่งประกวดภายในค่าย
+          </p>
+        </div>
+
+        <!-- ----- Growth item 4 ----- -->
+        <div class="relative">
+          <span class="bloom-dot absolute -left-12 sm:-left-16 top-1 w-8 h-8 flex items-center justify-center text-xl">🌱</span>
+          <span class="font-hand text-xl text-sage">2565 – ปัจจุบัน</span>
+          <h3 class="font-display font-semibold text-lg mt-1 text-leaf">พนักงานพาร์ทไทม์ &middot; ฝ่ายบริการลูกค้า</h3>
+          <p class="text-sm text-leaf/60 mb-2">ร้านตัวอย่าง</p>
+          <p class="text-inkgreen/75 text-sm leading-relaxed max-w-xl">
+            ฝึกการสื่อสารกับลูกค้าและการแก้ปัญหาเฉพาะหน้า
+            ทำงานร่วมกับทีมในช่วงเวลาเร่งด่วนได้อย่างมีประสิทธิภาพ
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     [5] PROJECTS SECTION — "ผลงานที่ผลิบาน (Blossoming Projects)"
+     การ์ดทรง organic ขอบมนไม่เท่ากัน
+     แก้ไข: รูปภาพ, ชื่อโปรเจกต์, คำอธิบาย, แท็กเทคโนโลยี, ลิงก์
+============================================================ -->
+<section id="projects" class="px-5 sm:px-8 py-20 bg-woodlt/50 border-t border-b border-wood/30">
+  <div class="max-w-6xl mx-auto">
+    <p class="font-hand text-2xl text-sage">Harvest of Work 🧺</p>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl mt-1 mb-12 text-leaf">ผลงานที่ผลิบาน</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- ----- Project Card 1 ----- -->
+      <article class="organic-card bg-cream border-2 border-wood/30 overflow-hidden flex flex-col">
+        <!-- แก้ไข: เปลี่ยนรูปภาพตัวอย่างผลงาน -->
+        <img src="https://placehold.co/600x360/8A9A5B/F7F2E9?text=Project+Screenshot"
+             alt="ภาพตัวอย่างโปรเจกต์ ระบบจัดการงานส่วนตัว"
+             class="w-full h-44 object-cover" />
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="font-display font-semibold text-lg text-leaf">ระบบจัดการงานส่วนตัว (To-Do App)</h3>
+          <p class="text-sm text-inkgreen/70 mt-2 flex-1 leading-relaxed">
+            เว็บแอปสำหรับจัดการรายการงาน เพิ่ม/แก้ไข/ลบ และจัดหมวดหมู่ตามความสำคัญ
+            พร้อมระบบบันทึกข้อมูลแบบ Local Storage
+          </p>
+          <!-- แท็กเทคโนโลยี ใช้ไอคอนต้นไม้แทน badge ปกติ -->
+          <div class="flex flex-wrap gap-2 mt-4 mb-5 text-xs">
+            <span class="px-3 py-1 rounded-full bg-sage/15 text-sagedeep font-medium">🌳 React</span>
+            <span class="px-3 py-1 rounded-full bg-sage/15 text-sagedeep font-medium">🌳 Tailwind CSS</span>
+            <span class="px-3 py-1 rounded-full bg-sage/15 text-sagedeep font-medium">🌳 LocalStorage</span>
+          </div>
+          <div class="flex gap-4 text-sm font-display font-medium">
+            <!-- แก้ไข: ใส่ลิงก์ GitHub / เว็บจำลองจริง -->
+            <a href="#" class="flex items-center gap-1.5 text-leaf hover:text-sage transition-colors">
+              🧺 ดูผลงาน
+            </a>
+            <a href="#" class="flex items-center gap-1.5 text-leaf hover:text-sage transition-colors">
+              🔗 GitHub
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ----- Project Card 2 ----- -->
+      <article class="organic-card bg-cream border-2 border-wood/30 overflow-hidden flex flex-col">
+        <img src="https://placehold.co/600x360/C9A57B/F7F2E9?text=Project+Screenshot"
+             alt="ภาพตัวอย่างโปรเจกต์ เว็บไซต์ร้านค้าออนไลน์จำลอง"
+             class="w-full h-44 object-cover" />
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="font-display font-semibold text-lg text-leaf">เว็บไซต์ร้านค้าออนไลน์จำลอง</h3>
+          <p class="text-sm text-inkgreen/70 mt-2 flex-1 leading-relaxed">
+            หน้าร้านค้าออนไลน์จำลอง มีระบบตะกร้าสินค้า ค้นหา และกรองสินค้าตามหมวดหมู่
+            ออกแบบ UI ให้ใช้งานง่ายบนมือถือ
+          </p>
+          <div class="flex flex-wrap gap-2 mt-4 mb-5 text-xs">
+            <span class="px-3 py-1 rounded-full bg-blossom/30 text-leaf font-medium">🌸 HTML/CSS</span>
+            <span class="px-3 py-1 rounded-full bg-blossom/30 text-leaf font-medium">🌸 JavaScript</span>
+            <span class="px-3 py-1 rounded-full bg-blossom/30 text-leaf font-medium">🌸 Figma</span>
+          </div>
+          <div class="flex gap-4 text-sm font-display font-medium">
+            <a href="#" class="flex items-center gap-1.5 text-leaf hover:text-sage transition-colors">
+              🧺 ดูผลงาน
+            </a>
+            <a href="#" class="flex items-center gap-1.5 text-leaf hover:text-sage transition-colors">
+              🔗 GitHub
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ----- Project Card 3 ----- -->
+      <article class="organic-card bg-cream border-2 border-wood/30 overflow-hidden flex flex-col">
+        <img src="https://placehold.co/600x360/A9C4D8/3D5A40?text=Project+Screenshot"
+             alt="ภาพตัวอย่างโปรเจกต์ แอปพยากรณ์อากาศ"
+             class="w-full h-44 object-cover" />
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="font-display font-semibold text-lg text-leaf">แอปพยากรณ์อากาศ (Weather App)</h3>
+          <p class="text-sm text-inkgreen/70 mt-2 flex-1 leading-relaxed">
+            ดึงข้อมูลสภาพอากาศจาก API สาธารณะมาแสดงผลแบบเรียลไทม์
+            พร้อมค้นหาตามชื่อเมืองและแสดงไอคอนตามสภาพอากาศ
+          </p>
+          <div class="flex flex-wrap gap-2 mt-4 mb-5 text-xs">
+            <span class="px-3 py-1 rounded-full bg-sky/30 text-leaf font-medium">💧 JavaScript</span>
+            <span class="px-3 py-1 rounded-full bg-sky/30 text-leaf font-medium">💧 REST API</span>
+            <span class="px-3 py-1 rounded-full bg-sky/30 text-leaf font-medium">💧 CSS</span>
+          </div>
+          <div class="flex gap-4 text-sm font-display font-medium">
+            <a href="#" class="flex items-center gap-1.5 text-leaf hover:text-sage transition-colors">
+              🧺 ดูผลงาน
+            </a>
+            <a href="#" class="flex items-center gap-1.5 text-leaf hover:text-sage transition-colors">
+              🔗 GitHub
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- หากต้องการเพิ่มผลงานชิ้นที่ 4-6 ให้คัดลอก <article class="organic-card">...</article> ด้านบนวางต่อได้เลย -->
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     [6] CONTACT SECTION — "หว่านเมล็ดพันธุ์ไอเดีย (Seed Your Ideas)"
+     แก้ไข: action ของฟอร์ม, อีเมล, เบอร์โทร, ลิงก์ social
+============================================================ -->
+<section id="contact" class="px-5 sm:px-8 py-20 relative overflow-hidden">
+
+  <!-- ลายผีเสื้อ/ใบไม้ประดับมุมล่างซ้าย -->
+  <svg class="absolute bottom-0 left-0 w-40 opacity-50 hidden lg:block" viewBox="0 0 150 150" aria-hidden="true">
+    <path d="M10,140 C30,100 20,60 50,40 C80,20 90,60 70,90" class="vine-stroke"/>
+    <ellipse cx="50" cy="40" rx="10" ry="5" class="vine-leaf" transform="rotate(-30 50 40)"/>
+  </svg>
+
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 relative">
+
+    <!-- ฝั่งซ้าย: ข้อความ + ช่องทางติดต่อ -->
+    <div>
+      <p class="font-hand text-2xl text-sage">Seed Your Ideas 🦋</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl mt-1 mb-4 text-leaf">เชื่อมต่อและเติบโตด้วยกัน</h2>
+      <p class="text-inkgreen/70 leading-relaxed mb-10 max-w-md">
+        สนใจร่วมงาน มีตำแหน่งฝึกงาน หรืออยากพูดคุยเรื่องโปรเจกต์
+        หว่านเมล็ดพันธุ์ไอเดียไว้ที่นี่ได้เลย ผมจะรดน้ำให้มันงอกเงยเป็นบทสนทนาดีๆ ครับ
+      </p>
+
+      <!-- แก้ไข: เปลี่ยนข้อมูลติดต่อทั้งหมดในบล็อกนี้ -->
+      <ul class="space-y-4 font-display text-sm">
+        <li>
+          <a href="mailto:your.email@example.com" class="flex items-center gap-3 group">
+            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-woodlt group-hover:bg-sage group-hover:text-cream text-leaf transition-colors text-lg">📧</span>
+            your.email@example.com
+          </a>
+        </li>
+        <li>
+          <a href="tel:+66800000000" class="flex items-center gap-3 group">
+            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-woodlt group-hover:bg-sage group-hover:text-cream text-leaf transition-colors text-lg">📞</span>
+            080-000-0000
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group">
+            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-woodlt group-hover:bg-sage group-hover:text-cream text-leaf transition-colors text-lg">🐦</span>
+            github.com/yourusername
+          </a>
+        </li>
+        <li>
+          <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group">
+            <span class="w-10 h-10 flex items-center justify-center rounded-full bg-woodlt group-hover:bg-sage group-hover:text-cream text-leaf transition-colors text-lg">🦋</span>
+            linkedin.com/in/yourusername
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ฝั่งขวา: ฟอร์มติดต่อ -->
+    <div class="bg-woodlt/40 border-2 border-wood/30 rounded-[32px] p-6 sm:p-8">
+      <!--
+        แก้ไข: เปลี่ยน action="" เป็นปลายทางรับฟอร์มจริง
+        ตัวเลือกที่ใช้ง่ายสำหรับมือใหม่ (ไม่ต้องมี Backend):
+        - Formspree: https://formspree.io  (เปลี่ยน action เป็น https://formspree.io/f/รหัสของคุณ)
+        - Web3Forms: https://web3forms.com
+      -->
+      <form id="contact-form" action="https://formspree.io/f/your-form-id" method="POST" class="space-y-5">
+
+        <div>
+          <label for="name" class="block text-sm font-display font-medium mb-2 text-leaf">🌱 ชื่อ-นามสกุล</label>
+          <input type="text" id="name" name="name" required
+                 class="w-full bg-cream border-2 border-wood/40 rounded-2xl px-4 py-3 text-sm placeholder:text-leaf/40 focus:border-sage transition-colors"
+                 placeholder="กรอกชื่อของคุณ" />
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-display font-medium mb-2 text-leaf">🌼 อีเมล</label>
+          <input type="email" id="email" name="email" required
+                 class="w-full bg-cream border-2 border-wood/40 rounded-2xl px-4 py-3 text-sm placeholder:text-leaf/40 focus:border-sage transition-colors"
+                 placeholder="you@example.com" />
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-display font-medium mb-2 text-leaf">🌿 ข้อความ</label>
+          <textarea id="message" name="message" rows="5" required
+                    class="w-full bg-cream border-2 border-wood/40 rounded-2xl px-4 py-3 text-sm placeholder:text-leaf/40 focus:border-sage transition-colors resize-none"
+                    placeholder="อยากพูดคุยเรื่องอะไรบอกผมได้เลย..."></textarea>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-sage text-cream font-display font-semibold py-3 rounded-2xl hover:bg-sagedeep transition-colors">
+          ส่งความคึกคัก 🌸
+        </button>
+
+        <!-- ข้อความแจ้งสถานะหลังส่งฟอร์ม (ควบคุมด้วย JS ด้านล่าง) -->
+        <p id="form-status" class="text-sm text-center hidden"></p>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="px-5 sm:px-8 py-8 border-t border-wood/30 text-center">
+  <p class="text-xs text-leaf/60 font-display">
+    🌿 &copy; <span id="year"></span> ชื่อ นามสกุล. ปลูกด้วย HTML &amp; Tailwind CSS
+  </p>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT — interaction เล็กๆ (ไม่ต้องแก้ไขส่วนนี้)
+============================================================ -->
+<script>
+  // ปีปัจจุบันใน Footer
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // เปิด/ปิดเมนูมือถือ
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  menuBtn.addEventListener('click', () => {
+    const isHidden = mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden');
+    iconOpen.classList.toggle('hidden');
+    iconClose.classList.toggle('hidden');
+    menuBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    });
+  });
+
+  // เติม Leaf Progress Bar เมื่อ scroll เข้ามาในจอ
+  const skillBars = document.querySelectorAll('.leaf-progress-fill');
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        bar.style.width = bar.dataset.percent + '%';
+        skillObserver.unobserve(bar);
+      }
+    });
+  }, { threshold: 0.3 });
+  skillBars.forEach(bar => skillObserver.observe(bar));
+
+  // ส่งฟอร์มติดต่อแบบ AJAX (กันหน้ารีโหลด) — ใช้ได้กับ Formspree/Web3Forms
+  const form = document.getElementById('contact-form');
+  const formStatus = document.getElementById('form-status');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'กำลังหว่านเมล็ด...';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      formStatus.classList.remove('hidden');
+      if (response.ok) {
+        formStatus.textContent = '🌸 ส่งสำเร็จ! เมล็ดพันธุ์ของคุณถูกหว่านแล้ว ขอบคุณครับ';
+        formStatus.classList.add('text-sage');
+        form.reset();
+      } else {
+        formStatus.textContent = 'ส่งข้อความไม่สำเร็จ กรุณาลองใหม่ หรือติดต่อทางอีเมลโดยตรง';
+        formStatus.classList.add('text-red-500');
+      }
+    } catch (err) {
+      formStatus.classList.remove('hidden');
+      formStatus.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่ หรือติดต่อทางอีเมลโดยตรง';
+      formStatus.classList.add('text-red-500');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'ส่งความคึกคัก 🌸';
+    }
+  });
+</script>
+
+</body>
+</html>
